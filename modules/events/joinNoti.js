@@ -44,7 +44,7 @@ module.exports = {
       const threadInfo = await api.getThreadInfo(threadID);
       const msg = `› Welcome ${addedParticipants.map((i) => i.fullName).join(", ")} to ${threadInfo.name}!
 
-Added by: ${authorInfo.name} (${author})`;
+Added by: ${userNames.join} (${userNames})`;
 
       message.send(msg);
     }
