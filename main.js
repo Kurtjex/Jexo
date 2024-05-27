@@ -12,11 +12,17 @@ const configPath = path.join(__dirname, "json", "config.json");
 const configData = fs.readFileSync(configPath);
 const config = JSON.parse(configData);
 const app = new express();
-const port = 8601;
+const port = process.env.PORT || 8601;
 
 global.client = new Object({
   startTime: new Date(),
-  config: config,
+  get config() {
+    try {
+      return fs.readJSONSync("./json/config.json");
+    } catch (error) {
+      throw new Error(error);
+    };
+  },
   botPrefix: config.botPrefix,
   botAdmins: config.botAdmins,
   commands: new Map(),
@@ -70,8 +76,10 @@ async function start() {
 
         api.listen(async (err, event) => {
           if (err) return log.error(err);
-          const listen = require("./includes/listen");
-          listen({ api, event });
+          require("./includes/listen")({
+            api,
+            event
+          });
         });
       },
     );
