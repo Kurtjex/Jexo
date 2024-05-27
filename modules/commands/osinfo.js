@@ -1,3 +1,5 @@
+//file: osinfo.js
+
 const os = require("os");
 
 module.exports = {
@@ -14,9 +16,9 @@ module.exports = {
 
   async onRun({ api, event }) {
     try {
-      const uptimeFormatted = global.client.startTime
-        .toISOString()
-        .substr(11, 8);
+      const currentTime = new Date();
+      const uptime = currentTime - global.client.startTime;
+      const uptimeFormatted = formatUptime(uptime);
 
       const osInfo = {
         platform: os.platform(),
@@ -24,7 +26,7 @@ module.exports = {
         release: os.release(),
         architecture: os.arch(),
         hostname: os.hostname(),
-        uptime: global.client.startTime,
+        uptime: uptime,
         totalMemory: os.totalmem(),
         freeMemory: os.freemem(),
         cpus: os.cpus(),
@@ -52,6 +54,15 @@ Number of CPUs: ${osInfo.cpus.length}
     }
   },
 };
+
+function formatUptime(ms) {
+  const days = Math.floor(ms / (24 * 60 * 60 * 1000));
+  const hours = Math.floor((ms % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+  const minutes = Math.floor((ms % (60 * 60 * 1000)) / (60 * 1000));
+  const seconds = Math.floor((ms % (60 * 1000)) / 1000);
+
+  return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
 
 function formatBytes(bytes) {
   const units = ["B", "KB", "MB", "GB", "TB"];
