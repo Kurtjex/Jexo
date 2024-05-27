@@ -5,7 +5,9 @@ module.exports = {
     description: "Join notifications",
     author: "Rui",
   },
-  async onEvent({ message, api, event, fonts }) {
+  async onEvent({
+    message, api, event, fonts
+  }) {
     const { botName, botPrefix, botAdmins } = global.client.config;
 
     if (
@@ -17,17 +19,15 @@ module.exports = {
       api.changeNickname(
         `[ ${botPrefix} ]: ${botName}`,
         event.threadID,
-        api.getCurrentUserID(),
+        api.getCurrentUserID()
       );
 
       const threadInfo = await api.getThreadInfo(event.threadID);
 
-      message.send(
-        `› ${fonts.bold(`${botName}`)} ${fonts.sans(`connected successfully!\n\nUse ${botPrefix}help to see available commands!`)}`,
-      );
+      message.send(`› ${fonts.bold(`${botName}`)} ${fonts.sans(`connected successfully!\n\nUse ${botPrefix}help to see available commands!`)}`);
 
       const adminMsg = `✅ | ${botName} joined the group: ${threadInfo.name} (${event.threadID})`;
-      botAdmins.forEach((adminID) => {
+      botAdmins.forEach(adminID => {
         api.sendMessage(adminMsg, adminID);
       });
     } else if (
@@ -48,5 +48,5 @@ Added by: ${authorInfo.name} (${author})`;
 
       message.send(msg);
     }
-  },
+  }
 };
